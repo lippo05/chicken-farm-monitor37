@@ -1,4 +1,5 @@
 // Firebase Configuration
+// Firebase Configuration for ESP32 Library
 const firebaseConfig = {
   apiKey: "AIzaSyC8OZZ27bP-HQXimnYbyNzCrWDJdgupl1I",
   authDomain: "farmmonitoring-a9cfa.firebaseapp.com",
@@ -13,6 +14,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
+
+// The rest of your website code remains the same...
+// (Use the website code I provided earlier)
 
 // DOM Elements
 const loginForm = document.getElementById('loginForm');
