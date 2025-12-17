@@ -10,177 +10,308 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
 </head>
 <body>
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+    
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1><i class="fas fa-tractor"></i> Farm Monitoring & Control</h1>
-            <div class="connection-status">
-                <span id="connectionStatus" class="status-offline">
-                    <i class="fas fa-circle"></i> Offline
-                </span>
-                <button id="logoutBtn" class="btn btn-logout">Logout</button>
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-tractor"></i>
+                    <h1>Smart Farm Control</h1>
+                </div>
+                <div class="connection-info">
+                    <div class="connection-item">
+                        <span class="connection-label">Bridge:</span>
+                        <span id="bridgeStatus" class="status-offline">
+                            <i class="fas fa-circle"></i> Offline
+                        </span>
+                    </div>
+                    <div class="connection-item">
+                        <span class="connection-label">LoRa:</span>
+                        <span id="loraStatus" class="status-offline">
+                            <i class="fas fa-circle"></i> Offline
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userEmail">Not logged in</span>
+                </div>
+                <button id="logoutBtn" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </header>
 
         <!-- Login Form -->
         <div id="loginForm" class="login-container">
             <div class="login-card">
-                <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
-                <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
-                    <input type="email" id="email" placeholder="Enter your email">
+                <div class="login-header">
+                    <i class="fas fa-seedling login-icon"></i>
+                    <h2>Farm Control System</h2>
+                    <p class="login-subtitle">Monitor and control your farm remotely</p>
                 </div>
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Password:</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" placeholder="admin@farm.com" value="admin@farm.com">
                 </div>
-                <button id="loginBtn" class="btn btn-login">Login</button>
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" placeholder="••••••••" value="admin123">
+                </div>
+                <button id="loginBtn" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                </button>
                 <p class="error-message" id="loginError"></p>
+                <div class="login-footer">
+                    <p><i class="fas fa-info-circle"></i> Default: admin@farm.com / admin123</p>
+                </div>
             </div>
         </div>
 
-        <!-- Dashboard (hidden until login) -->
+        <!-- Main Dashboard (hidden until login) -->
         <div id="dashboard" class="dashboard hidden">
-            <!-- Farm Selection -->
-            <div class="farm-selection">
-                <h3><i class="fas fa-map-marker-alt"></i> Select Farm</h3>
-                <select id="farmSelector" class="farm-selector">
-                    <option value="">-- Select a farm --</option>
-                    <!-- Farms will be populated dynamically -->
-                </select>
+            <!-- Bridge Selection -->
+            <div class="bridge-selection">
+                <div class="bridge-header">
+                    <h3><i class="fas fa-satellite-dish"></i> Bridge Connection</h3>
+                    <button id="refreshBridgeBtn" class="btn btn-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div class="bridge-list" id="bridgeList">
+                    <!-- Bridges will be populated here -->
+                    <div class="no-bridges">
+                        <i class="fas fa-satellite"></i>
+                        <p>No bridges connected</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Main Dashboard -->
+            <!-- Sensor Dashboard -->
             <div class="dashboard-grid">
-                <!-- Sensor Data -->
-                <div class="card sensor-card">
-                    <h3><i class="fas fa-water"></i> Water Level</h3>
-                    <div class="sensor-value">
-                        <div class="gauge">
-                            <div class="gauge-fill" id="waterGauge"></div>
+                <!-- Water Level Card -->
+                <div class="card sensor-card water-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-water"></i> Water Tank</h3>
+                        <span class="card-badge" id="waterBadge">NORMAL</span>
+                    </div>
+                    <div class="sensor-content">
+                        <div class="gauge-container">
+                            <div class="gauge">
+                                <div class="gauge-fill" id="waterGauge"></div>
+                                <div class="gauge-text" id="waterValue">0%</div>
+                            </div>
+                            <div class="gauge-label">Current Level</div>
                         </div>
-                        <span class="value" id="waterValue">0%</span>
-                    </div>
-                    <div class="sensor-status">
-                        <span id="waterStatus" class="status-normal">
-                            <i class="fas fa-check-circle"></i> Normal
-                        </span>
-                    </div>
-                </div>
-
-                <div class="card sensor-card">
-                    <h3><i class="fas fa-seedling"></i> Feed Level</h3>
-                    <div class="sensor-value">
-                        <div class="gauge">
-                            <div class="gauge-fill" id="feedGauge"></div>
+                        <div class="sensor-info">
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-history"></i> Last Update:</span>
+                                <span id="waterUpdate" class="info-value">Never</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-bell"></i> Alert Level:</span>
+                                <span class="info-value">Below 70%</span>
+                            </div>
                         </div>
-                        <span class="value" id="feedValue">0%</span>
-                    </div>
-                    <div class="sensor-status">
-                        <span id="feedStatus" class="status-normal">
-                            <i class="fas fa-check-circle"></i> Normal
-                        </span>
                     </div>
                 </div>
 
-                <!-- Control Panels -->
-                <div class="card control-card">
-                    <h3><i class="fas fa-cogs"></i> Servo 1 Control</h3>
-                    <div class="servo-status">
-                        <span id="servo1Status" class="status-closed">
-                            <i class="fas fa-door-closed"></i> Closed
-                        </span>
+                <!-- Feed Level Card -->
+                <div class="card sensor-card feed-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-seedling"></i> Feed Storage</h3>
+                        <span class="card-badge" id="feedBadge">NORMAL</span>
                     </div>
-                    <div class="control-buttons">
-                        <button class="btn btn-open" onclick="controlServo('open')">
-                            <i class="fas fa-door-open"></i> Open
-                        </button>
-                        <button class="btn btn-close" onclick="controlServo('close')">
-                            <i class="fas fa-door-closed"></i> Close
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card control-card">
-                    <h3><i class="fas fa-cogs"></i> Servo 2 Control</h3>
-                    <div class="servo-status">
-                        <span id="servo2Status" class="status-closed">
-                            <i class="fas fa-door-closed"></i> Closed
-                        </span>
-                    </div>
-                    <div class="control-buttons">
-                        <button class="btn btn-open" onclick="controlServo2('open')">
-                            <i class="fas fa-door-open"></i> Open
-                        </button>
-                        <button class="btn btn-close" onclick="controlServo2('close')">
-                            <i class="fas fa-door-closed"></i> Close
-                        </button>
-                        <button class="btn btn-toggle" onclick="controlServo2('toggle')">
-                            <i class="fas fa-sync-alt"></i> Toggle
-                        </button>
+                    <div class="sensor-content">
+                        <div class="gauge-container">
+                            <div class="gauge">
+                                <div class="gauge-fill" id="feedGauge"></div>
+                                <div class="gauge-text" id="feedValue">0%</div>
+                            </div>
+                            <div class="gauge-label">Current Level</div>
+                        </div>
+                        <div class="sensor-info">
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-history"></i> Last Update:</span>
+                                <span id="feedUpdate" class="info-value">Never</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-bell"></i> Alert Level:</span>
+                                <span class="info-value">Below 50%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Pump Control -->
-                <div class="card pump-card">
-                    <h3><i class="fas fa-faucet"></i> Water Pump</h3>
-                    <div class="pump-status">
-                        <span id="pumpStatus" class="status-off">
-                            <i class="fas fa-power-off"></i> OFF
-                        </span>
+                <!-- Servo 1 Control -->
+                <div class="card control-card servo-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-door-closed"></i> Water Gate (Servo 1)</h3>
+                        <div class="status-indicator" id="servo1Indicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">CLOSED</span>
+                        </div>
                     </div>
-                    <div class="pump-control">
-                        <button class="btn btn-on" onclick="controlPump('on')">
-                            <i class="fas fa-play"></i> Turn ON
-                        </button>
-                        <button class="btn btn-off" onclick="controlPump('off')">
-                            <i class="fas fa-stop"></i> Turn OFF
-                        </button>
-                        <button class="btn btn-toggle" onclick="controlPump('toggle')">
-                            <i class="fas fa-exchange-alt"></i> Toggle
-                        </button>
+                    <div class="control-content">
+                        <div class="servo-visual">
+                            <div class="servo-icon" id="servo1Icon">
+                                <i class="fas fa-door-closed"></i>
+                            </div>
+                            <div class="servo-position">
+                                <span class="position-label">Position:</span>
+                                <span class="position-value" id="servo1Position">0°</span>
+                            </div>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="btn btn-control btn-open" onclick="controlServo1('open')">
+                                <i class="fas fa-door-open"></i> Open Gate
+                            </button>
+                            <button class="btn btn-control btn-close" onclick="controlServo1('close')">
+                                <i class="fas fa-door-closed"></i> Close Gate
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Device Info -->
+                <!-- Servo 2 Control -->
+                <div class="card control-card servo-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-door-closed"></i> Feed Gate (Servo 2)</h3>
+                        <div class="status-indicator" id="servo2Indicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">CLOSED</span>
+                        </div>
+                    </div>
+                    <div class="control-content">
+                        <div class="servo-visual">
+                            <div class="servo-icon" id="servo2Icon">
+                                <i class="fas fa-door-closed"></i>
+                            </div>
+                            <div class="servo-position">
+                                <span class="position-label">Position:</span>
+                                <span class="position-value" id="servo2Position">0°</span>
+                            </div>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="btn btn-control btn-open" onclick="controlServo2('open')">
+                                <i class="fas fa-door-open"></i> Open Gate
+                            </button>
+                            <button class="btn btn-control btn-close" onclick="controlServo2('close')">
+                                <i class="fas fa-door-closed"></i> Close Gate
+                            </button>
+                            <button class="btn btn-control btn-toggle" onclick="controlServo2('toggle')">
+                                <i class="fas fa-sync-alt"></i> Toggle Gate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Water Pump Control -->
+                <div class="card control-card pump-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-faucet"></i> Water Pump</h3>
+                        <div class="status-indicator" id="pumpIndicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">OFF</span>
+                        </div>
+                    </div>
+                    <div class="control-content">
+                        <div class="pump-visual">
+                            <div class="pump-icon" id="pumpIcon">
+                                <i class="fas fa-power-off"></i>
+                            </div>
+                            <div class="pump-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-value" id="pumpStatusText">STOPPED</span>
+                            </div>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="btn btn-control btn-on" onclick="controlPump('on')">
+                                <i class="fas fa-play"></i> Start Pump
+                            </button>
+                            <button class="btn btn-control btn-off" onclick="controlPump('off')">
+                                <i class="fas fa-stop"></i> Stop Pump
+                            </button>
+                            <button class="btn btn-control btn-toggle" onclick="controlPump('toggle')">
+                                <i class="fas fa-exchange-alt"></i> Toggle Pump
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connection Info Card -->
                 <div class="card info-card">
-                    <h3><i class="fas fa-info-circle"></i> Device Information</h3>
-                    <div class="info-item">
-                        <span class="info-label">Device ID:</span>
-                        <span id="deviceId" class="info-value">N/A</span>
+                    <div class="card-header">
+                        <h3><i class="fas fa-wifi"></i> Connection Status</h3>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">Last Update:</span>
-                        <span id="lastUpdate" class="info-value">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">WiFi Signal:</span>
-                        <span id="wifiSignal" class="info-value">N/A</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Uptime:</span>
-                        <span id="uptime" class="info-value">0s</span>
+                    <div class="info-content">
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-satellite-dish"></i> Active Bridge:</span>
+                            <span id="activeBridge" class="info-value">None</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-signal"></i> LoRa Signal:</span>
+                            <span id="loraSignal" class="info-value">- dBm</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-ruler"></i> Distance:</span>
+                            <span id="loraDistance" class="info-value">0 m</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-chart-line"></i> SNR:</span>
+                            <span id="loraSNR" class="info-value">0 dB</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-database"></i> Packets:</span>
+                            <span id="packetCount" class="info-value">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-clock"></i> Last Data:</span>
+                            <span id="lastDataTime" class="info-value">Never</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Alert Section -->
-            <div class="alert-section">
-                <h3><i class="fas fa-exclamation-triangle"></i> Alerts</h3>
-                <div id="alertsContainer" class="alerts-container">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> No active alerts
+            <!-- Alert Panel -->
+            <div class="alert-panel" id="alertPanel">
+                <div class="alert-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Active Alerts</h3>
+                    <span class="alert-count" id="alertCount">0</span>
+                </div>
+                <div class="alert-content" id="alertContent">
+                    <div class="no-alerts">
+                        <i class="fas fa-check-circle"></i>
+                        <p>All systems normal</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Logs Section -->
-            <div class="logs-section">
-                <h3><i class="fas fa-history"></i> Recent Activity</h3>
-                <div id="logsContainer" class="logs-container">
-                    <!-- Logs will be populated here -->
+            <!-- Log Panel -->
+            <div class="log-panel">
+                <div class="log-header">
+                    <h3><i class="fas fa-history"></i> System Log</h3>
+                    <button id="clearLogBtn" class="btn btn-clear">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+                <div class="log-content" id="logContent">
+                    <div class="log-entry">
+                        <span class="log-time">[00:00:00]</span>
+                        <span class="log-message">System initialized</span>
+                    </div>
                 </div>
             </div>
         </div>
