@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Monitoring & Control Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-tractor"></i> Farm Monitoring & Control</h1>
+            <div class="connection-status">
+                <span id="connectionStatus" class="status-offline">
+                    <i class="fas fa-circle"></i> Offline
+                </span>
+                <button id="logoutBtn" class="btn btn-logout">Logout</button>
+            </div>
+        </header>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="login-container">
+            <div class="login-card">
+                <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button id="loginBtn" class="btn btn-login">Login</button>
+                <p class="error-message" id="loginError"></p>
+            </div>
+        </div>
+
+        <!-- Dashboard (hidden until login) -->
+        <div id="dashboard" class="dashboard hidden">
+            <!-- Farm Selection -->
+            <div class="farm-selection">
+                <h3><i class="fas fa-map-marker-alt"></i> Select Farm</h3>
+                <select id="farmSelector" class="farm-selector">
+                    <option value="">-- Select a farm --</option>
+                    <!-- Farms will be populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Main Dashboard -->
+            <div class="dashboard-grid">
+                <!-- Sensor Data -->
+                <div class="card sensor-card">
+                    <h3><i class="fas fa-water"></i> Water Level</h3>
+                    <div class="sensor-value">
+                        <div class="gauge">
+                            <div class="gauge-fill" id="waterGauge"></div>
+                        </div>
+                        <span class="value" id="waterValue">0%</span>
+                    </div>
+                    <div class="sensor-status">
+                        <span id="waterStatus" class="status-normal">
+                            <i class="fas fa-check-circle"></i> Normal
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card sensor-card">
+                    <h3><i class="fas fa-seedling"></i> Feed Level</h3>
+                    <div class="sensor-value">
+                        <div class="gauge">
+                            <div class="gauge-fill" id="feedGauge"></div>
+                        </div>
+                        <span class="value" id="feedValue">0%</span>
+                    </div>
+                    <div class="sensor-status">
+                        <span id="feedStatus" class="status-normal">
+                            <i class="fas fa-check-circle"></i> Normal
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Control Panels -->
+                <div class="card control-card">
+                    <h3><i class="fas fa-cogs"></i> Servo 1 Control</h3>
+                    <div class="servo-status">
+                        <span id="servo1Status" class="status-closed">
+                            <i class="fas fa-door-closed"></i> Closed
+                        </span>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn btn-open" onclick="controlServo('open')">
+                            <i class="fas fa-door-open"></i> Open
+                        </button>
+                        <button class="btn btn-close" onclick="controlServo('close')">
+                            <i class="fas fa-door-closed"></i> Close
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card control-card">
+                    <h3><i class="fas fa-cogs"></i> Servo 2 Control</h3>
+                    <div class="servo-status">
+                        <span id="servo2Status" class="status-closed">
+                            <i class="fas fa-door-closed"></i> Closed
+                        </span>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn btn-open" onclick="controlServo2('open')">
+                            <i class="fas fa-door-open"></i> Open
+                        </button>
+                        <button class="btn btn-close" onclick="controlServo2('close')">
+                            <i class="fas fa-door-closed"></i> Close
+                        </button>
+                        <button class="btn btn-toggle" onclick="controlServo2('toggle')">
+                            <i class="fas fa-sync-alt"></i> Toggle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pump Control -->
+                <div class="card pump-card">
+                    <h3><i class="fas fa-faucet"></i> Water Pump</h3>
+                    <div class="pump-status">
+                        <span id="pumpStatus" class="status-off">
+                            <i class="fas fa-power-off"></i> OFF
+                        </span>
+                    </div>
+                    <div class="pump-control">
+                        <button class="btn btn-on" onclick="controlPump('on')">
+                            <i class="fas fa-play"></i> Turn ON
+                        </button>
+                        <button class="btn btn-off" onclick="controlPump('off')">
+                            <i class="fas fa-stop"></i> Turn OFF
+                        </button>
+                        <button class="btn btn-toggle" onclick="controlPump('toggle')">
+                            <i class="fas fa-exchange-alt"></i> Toggle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Device Info -->
+                <div class="card info-card">
+                    <h3><i class="fas fa-info-circle"></i> Device Information</h3>
+                    <div class="info-item">
+                        <span class="info-label">Device ID:</span>
+                        <span id="deviceId" class="info-value">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Last Update:</span>
+                        <span id="lastUpdate" class="info-value">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">WiFi Signal:</span>
+                        <span id="wifiSignal" class="info-value">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Uptime:</span>
+                        <span id="uptime" class="info-value">0s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Section -->
+            <div class="alert-section">
+                <h3><i class="fas fa-exclamation-triangle"></i> Alerts</h3>
+                <div id="alertsContainer" class="alerts-container">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No active alerts
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Section -->
+            <div class="logs-section">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <div id="logsContainer" class="logs-container">
+                    <!-- Logs will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
