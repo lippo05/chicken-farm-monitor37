@@ -913,6 +913,7 @@ body {
 .btn-logout {
     background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
+    display: none; /* Hidden by default */
 }
 
 .btn-logout:hover {
