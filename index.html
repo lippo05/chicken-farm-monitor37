@@ -155,26 +155,36 @@
                     </div>
                 </div>
 
-                <!-- Water Pump Control -->
-                <div class="card control-card pump-card">
+                <!-- Connection Info Card -->
+                <div class="card info-card">
                     <div class="card-header">
-                        <h3><i class="fas fa-faucet"></i> Water Pump</h3>
-                        <div class="status-indicator" id="pumpIndicator">
-                            <span class="status-dot"></span>
-                            <span class="status-text">OFF</span>
-                        </div>
+                        <h3><i class="fas fa-wifi"></i> Connection Status</h3>
                     </div>
-                    <div class="control-content">
-                        <div class="pump-visual">
-                            <div class="pump-icon" id="pumpIcon">
-                                <i class="fas fa-power-off"></i>
-                            </div>
-                            <div class="pump-status">
-                                <span class="status-label">Status:</span>
-                                <span class="status-value" id="pumpStatusText">STOPPED</span>
-                            </div>
+                    <div class="info-content">
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-satellite-dish"></i> Active Bridge:</span>
+                            <span id="activeBridge" class="info-value">None</span>
                         </div>
-                        <!-- No buttons for Water Pump -->
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-signal"></i> LoRa Signal:</span>
+                            <span id="loraSignal" class="info-value">- dBm</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-ruler"></i> Distance:</span>
+                            <span id="loraDistance" class="info-value">0 m</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-chart-line"></i> SNR:</span>
+                            <span id="loraSNR" class="info-value">0 dB</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-database"></i> Packets:</span>
+                            <span id="packetCount" class="info-value">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label"><i class="fas fa-clock"></i> Last Data:</span>
+                            <span id="lastDataTime" class="info-value">Never</span>
+                        </div>
                     </div>
                 </div>
 
@@ -234,36 +244,26 @@
                     </div>
                 </div>
 
-                <!-- Connection Info Card -->
-                <div class="card info-card">
+                <!-- Water Pump Control -->
+                <div class="card control-card pump-card">
                     <div class="card-header">
-                        <h3><i class="fas fa-wifi"></i> Connection Status</h3>
+                        <h3><i class="fas fa-faucet"></i> Water Pump</h3>
+                        <div class="status-indicator" id="pumpIndicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">OFF</span>
+                        </div>
                     </div>
-                    <div class="info-content">
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-satellite-dish"></i> Active Bridge:</span>
-                            <span id="activeBridge" class="info-value">None</span>
+                    <div class="control-content">
+                        <div class="pump-visual">
+                            <div class="pump-icon" id="pumpIcon">
+                                <i class="fas fa-power-off"></i>
+                            </div>
+                            <div class="pump-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-value" id="pumpStatusText">STOPPED</span>
+                            </div>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-signal"></i> LoRa Signal:</span>
-                            <span id="loraSignal" class="info-value">- dBm</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-ruler"></i> Distance:</span>
-                            <span id="loraDistance" class="info-value">0 m</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-chart-line"></i> SNR:</span>
-                            <span id="loraSNR" class="info-value">0 dB</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-database"></i> Packets:</span>
-                            <span id="packetCount" class="info-value">0</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label"><i class="fas fa-clock"></i> Last Data:</span>
-                            <span id="lastDataTime" class="info-value">Never</span>
-                        </div>
+                        <!-- No buttons for Water Pump -->
                     </div>
                 </div>
             </div>
