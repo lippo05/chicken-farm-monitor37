@@ -691,16 +691,23 @@ body {
     font-size: 18px;
 }
 
-/* Updated button colors for Feed Gate 2 */
-.feed-gate-2-card .btn-open,
-.feed-gate-2-card .btn-close {
+/* Feed Gate 2 specific button colors */
+.feed-gate-2-card .btn-open {
     background: linear-gradient(135deg, #27ae60, #229954);
     color: white;
 }
 
-.feed-gate-2-card .btn-open:hover,
-.feed-gate-2-card .btn-close:hover {
+.feed-gate-2-card .btn-open:hover {
     background: linear-gradient(135deg, #229954, #27ae60);
+}
+
+.feed-gate-2-card .btn-close {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.feed-gate-2-card .btn-close:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
 }
 
 .feed-gate-2-card .btn-toggle {
@@ -904,12 +911,12 @@ body {
 }
 
 .btn-logout {
-    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
 }
 
 .btn-logout:hover {
-    background: linear-gradient(135deg, var(--danger-dark), var(--danger));
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
 }
 
 .btn-refresh {
@@ -942,12 +949,12 @@ body {
 }
 
 .btn-close, .btn-off {
-    background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
 }
 
 .btn-close:hover, .btn-off:hover {
-    background: linear-gradient(135deg, var(--danger-dark), var(--danger));
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
 }
 
 .btn-toggle {
