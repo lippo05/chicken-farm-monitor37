@@ -155,10 +155,33 @@
                     </div>
                 </div>
 
-                <!-- Servo 1 Control -->
-                <div class="card control-card servo-card">
+                <!-- Water Pump Control -->
+                <div class="card control-card pump-card">
                     <div class="card-header">
-                        <h3><i class="fas fa-door-closed"></i> Water Gate (Servo 1)</h3>
+                        <h3><i class="fas fa-faucet"></i> Water Pump</h3>
+                        <div class="status-indicator" id="pumpIndicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">OFF</span>
+                        </div>
+                    </div>
+                    <div class="control-content">
+                        <div class="pump-visual">
+                            <div class="pump-icon" id="pumpIcon">
+                                <i class="fas fa-power-off"></i>
+                            </div>
+                            <div class="pump-status">
+                                <span class="status-label">Status:</span>
+                                <span class="status-value" id="pumpStatusText">STOPPED</span>
+                            </div>
+                        </div>
+                        <!-- No buttons for Water Pump -->
+                    </div>
+                </div>
+
+                <!-- Feed Gate 1 Control -->
+                <div class="card control-card feed-gate-1-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-door-closed"></i> Feed Gate 1</h3>
                         <div class="status-indicator" id="servo1Indicator">
                             <span class="status-dot"></span>
                             <span class="status-text">CLOSED</span>
@@ -174,21 +197,14 @@
                                 <span class="position-value" id="servo1Position">0°</span>
                             </div>
                         </div>
-                        <div class="control-buttons">
-                            <button class="btn btn-control btn-open" onclick="controlServo1('open')">
-                                <i class="fas fa-door-open"></i> Open Gate
-                            </button>
-                            <button class="btn btn-control btn-close" onclick="controlServo1('close')">
-                                <i class="fas fa-door-closed"></i> Close Gate
-                            </button>
-                        </div>
+                        <!-- No buttons for Feed Gate 1 -->
                     </div>
                 </div>
 
-                <!-- Servo 2 Control -->
-                <div class="card control-card servo-card">
+                <!-- Feed Gate 2 Control -->
+                <div class="card control-card feed-gate-2-card">
                     <div class="card-header">
-                        <h3><i class="fas fa-door-closed"></i> Feed Gate (Servo 2)</h3>
+                        <h3><i class="fas fa-door-closed"></i> Feed Gate 2</h3>
                         <div class="status-indicator" id="servo2Indicator">
                             <span class="status-dot"></span>
                             <span class="status-text">CLOSED</span>
@@ -213,39 +229,6 @@
                             </button>
                             <button class="btn btn-control btn-toggle" onclick="controlServo2('toggle')">
                                 <i class="fas fa-sync-alt"></i> Toggle Gate
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Water Pump Control -->
-                <div class="card control-card pump-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-faucet"></i> Water Pump</h3>
-                        <div class="status-indicator" id="pumpIndicator">
-                            <span class="status-dot"></span>
-                            <span class="status-text">OFF</span>
-                        </div>
-                    </div>
-                    <div class="control-content">
-                        <div class="pump-visual">
-                            <div class="pump-icon" id="pumpIcon">
-                                <i class="fas fa-power-off"></i>
-                            </div>
-                            <div class="pump-status">
-                                <span class="status-label">Status:</span>
-                                <span class="status-value" id="pumpStatusText">STOPPED</span>
-                            </div>
-                        </div>
-                        <div class="control-buttons">
-                            <button class="btn btn-control btn-on" onclick="controlPump('on')">
-                                <i class="fas fa-play"></i> Start Pump
-                            </button>
-                            <button class="btn btn-control btn-off" onclick="controlPump('off')">
-                                <i class="fas fa-stop"></i> Stop Pump
-                            </button>
-                            <button class="btn btn-control btn-toggle" onclick="controlPump('toggle')">
-                                <i class="fas fa-exchange-alt"></i> Toggle Pump
                             </button>
                         </div>
                     </div>
