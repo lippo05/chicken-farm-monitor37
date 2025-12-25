@@ -566,7 +566,7 @@ body {
 }
 
 .pump-card .card-header {
-    background: linear-gradient(135deg, #ebf5fb, #d6eaf8);
+    background: linear-gradient(135deg, #3498db, #3498db);
 }
 
 .pump-card .card-header h3 i {
@@ -587,7 +587,7 @@ body {
 }
 
 .feed-gate-1-card .card-header {
-    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+    background: linear-gradient(135deg, #27ae60, #27ae60);
 }
 
 .feed-gate-1-card .card-header h3 i {
@@ -608,7 +608,7 @@ body {
 }
 
 .feed-gate-2-card .card-header {
-    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+    background: linear-gradient(135deg, #27ae60, #27ae60);
 }
 
 .feed-gate-2-card .card-header h3 i {
