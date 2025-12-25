@@ -542,6 +542,10 @@ body {
 /* Control Cards */
 .control-content {
     padding: 25px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .servo-visual, .pump-visual {
@@ -556,12 +560,67 @@ body {
     transition: var(--transition);
 }
 
-.servo-card.active .servo-icon {
-    color: var(--primary);
+/* Pump Card (Blue) */
+.pump-card {
+    border-top: 4px solid #3498db;
+}
+
+.pump-card .card-header {
+    background: linear-gradient(135deg, #ebf5fb, #d6eaf8);
+}
+
+.pump-card .card-header h3 i {
+    color: #3498db;
 }
 
 .pump-card.active .pump-icon {
-    color: var(--secondary);
+    color: #3498db;
+}
+
+.pump-card.active .status-dot {
+    background: #3498db;
+}
+
+/* Feed Gate 1 Card (Green) */
+.feed-gate-1-card {
+    border-top: 4px solid #27ae60;
+}
+
+.feed-gate-1-card .card-header {
+    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+}
+
+.feed-gate-1-card .card-header h3 i {
+    color: #27ae60;
+}
+
+.feed-gate-1-card.active .servo-icon {
+    color: #27ae60;
+}
+
+.feed-gate-1-card.active .status-dot {
+    background: #27ae60;
+}
+
+/* Feed Gate 2 Card (Green) */
+.feed-gate-2-card {
+    border-top: 4px solid #27ae60;
+}
+
+.feed-gate-2-card .card-header {
+    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+}
+
+.feed-gate-2-card .card-header h3 i {
+    color: #27ae60;
+}
+
+.feed-gate-2-card.active .servo-icon {
+    color: #27ae60;
+}
+
+.feed-gate-2-card.active .status-dot {
+    background: #27ae60;
 }
 
 .servo-position, .pump-status {
@@ -630,6 +689,27 @@ body {
 
 .btn-control i {
     font-size: 18px;
+}
+
+/* Updated button colors for Feed Gate 2 */
+.feed-gate-2-card .btn-open,
+.feed-gate-2-card .btn-close {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.feed-gate-2-card .btn-open:hover,
+.feed-gate-2-card .btn-close:hover {
+    background: linear-gradient(135deg, #229954, #27ae60);
+}
+
+.feed-gate-2-card .btn-toggle {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.feed-gate-2-card .btn-toggle:hover {
+    background: linear-gradient(135deg, #e67e22, #f39c12);
 }
 
 /* Info Card */
@@ -1004,3 +1084,10 @@ body {
 .p-2 { padding: 1rem; }
 .p-3 { padding: 1.5rem; }
 .p-4 { padding: 2rem; }
+
+/* Add shake animation for errors */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
