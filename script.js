@@ -119,6 +119,9 @@ function initApp() {
     lastFeedUpdate = Date.now();
     lastConnectionUpdate = Date.now();
     
+    // Hide logout button initially (login page)
+    logoutBtn.style.display = 'none';
+    
     console.log('Application initialized');
 }
 
@@ -211,8 +214,8 @@ function handleAuthStateChanged(firebaseUser) {
         loadBridges();
         logEvent('User logged in', 'info');
         
-        // Show logout button
-        logoutBtn.classList.remove('hidden');
+        // Show logout button (on dashboard)
+        logoutBtn.style.display = 'flex';
     } else {
         // User is signed out
         user = null;
@@ -220,8 +223,8 @@ function handleAuthStateChanged(firebaseUser) {
         showLogin();
         resetDashboard();
         
-        // Hide logout button
-        logoutBtn.classList.add('hidden');
+        // Hide logout button (on login page)
+        logoutBtn.style.display = 'none';
     }
 }
 
