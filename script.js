@@ -402,7 +402,7 @@ function updateSensorDisplay(data) {
     feedUpdate.textContent = formatTimeAgo(data.timestamp);
     lastFeedUpdate = data.timestamp || Date.now();
     
-    // Servo 1
+    // Feed Gate 1 (formerly Servo 1)
     const servo1Pos = data.servo1 || 0;
     servo1Position.textContent = `${servo1Pos}°`;
     
@@ -410,15 +410,15 @@ function updateSensorDisplay(data) {
         servo1Indicator.className = 'status-indicator status-online';
         servo1Indicator.querySelector('.status-text').textContent = 'OPEN';
         servo1Icon.innerHTML = '<i class="fas fa-door-open"></i>';
-        servo1Icon.parentElement.parentElement.classList.add('active');
+        document.querySelector('.feed-gate-1-card').classList.add('active');
     } else {
         servo1Indicator.className = 'status-indicator status-offline';
         servo1Indicator.querySelector('.status-text').textContent = 'CLOSED';
         servo1Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
-        servo1Icon.parentElement.parentElement.classList.remove('active');
+        document.querySelector('.feed-gate-1-card').classList.remove('active');
     }
     
-    // Servo 2
+    // Feed Gate 2 (formerly Servo 2)
     const servo2Pos = data.servo2 || 0;
     servo2Position.textContent = `${servo2Pos}°`;
     
@@ -426,15 +426,15 @@ function updateSensorDisplay(data) {
         servo2Indicator.className = 'status-indicator status-online';
         servo2Indicator.querySelector('.status-text').textContent = 'OPEN';
         servo2Icon.innerHTML = '<i class="fas fa-door-open"></i>';
-        servo2Icon.parentElement.parentElement.classList.add('active');
+        document.querySelector('.feed-gate-2-card').classList.add('active');
     } else {
         servo2Indicator.className = 'status-indicator status-offline';
         servo2Indicator.querySelector('.status-text').textContent = 'CLOSED';
         servo2Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
-        servo2Icon.parentElement.parentElement.classList.remove('active');
+        document.querySelector('.feed-gate-2-card').classList.remove('active');
     }
     
-    // Pump
+    // Water Pump
     const pumpState = data.pump || false;
     pumpStatusText.textContent = pumpState ? 'RUNNING' : 'STOPPED';
     
@@ -442,12 +442,12 @@ function updateSensorDisplay(data) {
         pumpIndicator.className = 'status-indicator status-online';
         pumpIndicator.querySelector('.status-text').textContent = 'ON';
         pumpIcon.innerHTML = '<i class="fas fa-play"></i>';
-        pumpIcon.parentElement.parentElement.classList.add('active');
+        document.querySelector('.pump-card').classList.add('active');
     } else {
         pumpIndicator.className = 'status-indicator status-offline';
         pumpIndicator.querySelector('.status-text').textContent = 'OFF';
         pumpIcon.innerHTML = '<i class="fas fa-power-off"></i>';
-        pumpIcon.parentElement.parentElement.classList.remove('active');
+        document.querySelector('.pump-card').classList.remove('active');
     }
 }
 
@@ -473,16 +473,8 @@ function updateConnectionDisplay(data) {
 }
 
 // ===== COMMAND CONTROL =====
-function controlServo1(action) {
-    sendCommand('servo1', action);
-}
-
 function controlServo2(action) {
     sendCommand('servo2', action);
-}
-
-function controlPump(action) {
-    sendCommand('pump', action);
 }
 
 function sendCommand(device, action) {
@@ -858,17 +850,6 @@ window.addEventListener('error', (event) => {
     console.error('Global error:', event.error);
     logEvent(`JavaScript error: ${event.message}`, 'error');
 });
-
-// Add shake animation for errors
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-`;
-document.head.appendChild(style);
 
 // ===== STARTUP LOG =====
 logEvent('Farm Control System initialized', 'info');
