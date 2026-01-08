@@ -28,6 +28,7 @@ let alertCount = 0;
 // Data update timestamps
 let lastWaterUpdate = 0;
 let lastFeedUpdate = 0;
+let lastTempUpdate = 0;
 let lastConnectionUpdate = 0;
 
 // Bridge list
@@ -62,6 +63,10 @@ const feedGauge = document.getElementById('feedGauge');
 const feedBadge = document.getElementById('feedBadge');
 const feedUpdate = document.getElementById('feedUpdate');
 
+// Temperature elements
+const tempBadge = document.getElementById('tempBadge');
+const tempUpdate = document.getElementById('tempUpdate');
+
 // Control display elements
 const servo1Indicator = document.getElementById('servo1Indicator');
 const servo1Icon = document.getElementById('servo1Icon');
@@ -74,6 +79,11 @@ const servo2Position = document.getElementById('servo2Position');
 const pumpIndicator = document.getElementById('pumpIndicator');
 const pumpIcon = document.getElementById('pumpIcon');
 const pumpStatusText = document.getElementById('pumpStatusText');
+
+// Fan elements
+const fanIndicator = document.getElementById('fanIndicator');
+const fanIcon = document.getElementById('fanIcon');
+const fanStatusText = document.getElementById('fanStatusText');
 
 // Connection info elements
 const activeBridgeEl = document.getElementById('activeBridge');
@@ -117,6 +127,7 @@ function initApp() {
     // Initialize timestamps
     lastWaterUpdate = Date.now();
     lastFeedUpdate = Date.now();
+    lastTempUpdate = Date.now();
     lastConnectionUpdate = Date.now();
     
     // Hide logout button initially (login page)
@@ -411,6 +422,18 @@ function updateSensorDisplay(data) {
     feedUpdate.textContent = formatTimeAgo(data.timestamp);
     lastFeedUpdate = data.timestamp || Date.now();
     
+    // Temperature
+    const temperature = data.temperature || 0;
+    const tempNumber = document.querySelector('.temp-number');
+    if (tempNumber) {
+        tempNumber.textContent = temperature.toFixed(1);
+    }
+    tempUpdate.textContent = formatTimeAgo(data.timestamp);
+    lastTempUpdate = data.timestamp || Date.now();
+    
+    // Update temperature display color
+    updateTemperatureDisplay(temperature);
+    
     // Feed Gate 1
     const servo1Pos = data.servo1 || 0;
     servo1Position.textContent = `${servo1Pos}°`;
@@ -457,6 +480,52 @@ function updateSensorDisplay(data) {
         pumpIndicator.querySelector('.status-text').textContent = 'OFF';
         pumpIcon.innerHTML = '<i class="fas fa-power-off"></i>';
         document.querySelector('.pump-card').classList.remove('active');
+    }
+    
+    // Fan status
+    const fanState = data.fan || false;
+    fanStatusText.textContent = fanState ? 'RUNNING' : 'STOPPED';
+    
+    if (fanState) {
+        fanIndicator.className = 'status-indicator status-online';
+        fanIndicator.querySelector('.status-text').textContent = 'ON';
+        fanIcon.innerHTML = '<i class="fas fa-fan spin"></i>';
+        document.querySelector('.fan-card').classList.add('active');
+    } else {
+        fanIndicator.className = 'status-indicator status-offline';
+        fanIndicator.querySelector('.status-text').textContent = 'OFF';
+        fanIcon.innerHTML = '<i class="fas fa-fan"></i>';
+        document.querySelector('.fan-card').classList.remove('active');
+    }
+}
+
+function updateTemperatureDisplay(temperature) {
+    const tempDisplay = document.getElementById('temperatureValue');
+    const tempNumber = document.querySelector('.temp-number');
+    
+    if (!tempDisplay || !tempNumber) return;
+    
+    if (temperature >= 30) {
+        // Hot - red
+        tempDisplay.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+        tempNumber.style.color = '#fff';
+        tempBadge.textContent = 'HOT';
+        tempBadge.style.background = '#f8d7da';
+        tempBadge.style.color = '#721c24';
+    } else if (temperature <= 15 && temperature > -100) {
+        // Cold - blue
+        tempDisplay.style.background = 'linear-gradient(135deg, #74b9ff, #0984e3)';
+        tempNumber.style.color = '#fff';
+        tempBadge.textContent = 'COLD';
+        tempBadge.style.background = '#d1ecf1';
+        tempBadge.style.color = '#0c5460';
+    } else {
+        // Normal - green
+        tempDisplay.style.background = 'linear-gradient(135deg, #55efc4, #00b894)';
+        tempNumber.style.color = '#fff';
+        tempBadge.textContent = 'NORMAL';
+        tempBadge.style.background = '#d4efdf';
+        tempBadge.style.color = '#155724';
     }
 }
 
@@ -587,6 +656,22 @@ function checkAlerts(data) {
         feedBadge.textContent = 'NORMAL';
         feedBadge.style.background = '#fef9e7';
         feedBadge.style.color = '#7d6608';
+    }
+    
+    // Temperature alerts
+    const temperature = data.temperature || 0;
+    if (temperature >= 30) {
+        alerts.push({
+            type: 'warning',
+            message: `HIGH TEMPERATURE: ${temperature.toFixed(1)}°C`,
+            time: Date.now()
+        });
+    } else if (temperature <= 15 && temperature > -100) {
+        alerts.push({
+            type: 'warning',
+            message: `LOW TEMPERATURE: ${temperature.toFixed(1)}°C`,
+            time: Date.now()
+        });
     }
     
     // Connection alert (if no data for 60 seconds)
@@ -774,6 +859,18 @@ function resetDashboard() {
     feedBadge.textContent = 'NORMAL';
     feedUpdate.textContent = 'Never';
     
+    // Reset temperature
+    const tempNumber = document.querySelector('.temp-number');
+    if (tempNumber) {
+        tempNumber.textContent = '0.0';
+    }
+    const tempDisplay = document.getElementById('temperatureValue');
+    if (tempDisplay) {
+        tempDisplay.style.background = 'linear-gradient(135deg, #55efc4, #00b894)';
+    }
+    tempBadge.textContent = 'NORMAL';
+    tempUpdate.textContent = 'Never';
+    
     servo1Position.textContent = '0°';
     servo1Indicator.className = 'status-indicator status-offline';
     servo1Indicator.querySelector('.status-text').textContent = 'CLOSED';
@@ -788,6 +885,12 @@ function resetDashboard() {
     pumpIndicator.className = 'status-indicator status-offline';
     pumpIndicator.querySelector('.status-text').textContent = 'OFF';
     pumpIcon.innerHTML = '<i class="fas fa-power-off"></i>';
+    
+    fanStatusText.textContent = 'STOPPED';
+    fanIndicator.className = 'status-indicator status-offline';
+    fanIndicator.querySelector('.status-text').textContent = 'OFF';
+    fanIcon.innerHTML = '<i class="fas fa-fan"></i>';
+    fanIcon.classList.remove('spin');
     
     activeBridgeEl.textContent = 'None';
     loraSignal.textContent = '- dBm';
@@ -848,6 +951,9 @@ setInterval(() => {
     }
     if (lastFeedUpdate) {
         feedUpdate.textContent = formatTimeAgo(lastFeedUpdate);
+    }
+    if (lastTempUpdate) {
+        tempUpdate.textContent = formatTimeAgo(lastTempUpdate);
     }
     if (lastConnectionUpdate) {
         lastDataTime.textContent = formatTimeAgo(lastConnectionUpdate);
