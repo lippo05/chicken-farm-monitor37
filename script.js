@@ -68,14 +68,6 @@ const tempBadge = document.getElementById('tempBadge');
 const tempUpdate = document.getElementById('tempUpdate');
 
 // Control display elements
-const servo1Indicator = document.getElementById('servo1Indicator');
-const servo1Icon = document.getElementById('servo1Icon');
-const servo1Position = document.getElementById('servo1Position');
-
-const servo2Indicator = document.getElementById('servo2Indicator');
-const servo2Icon = document.getElementById('servo2Icon');
-const servo2Position = document.getElementById('servo2Position');
-
 const pumpIndicator = document.getElementById('pumpIndicator');
 const pumpIcon = document.getElementById('pumpIcon');
 const pumpStatusText = document.getElementById('pumpStatusText');
@@ -434,38 +426,6 @@ function updateSensorDisplay(data) {
     // Update temperature display color
     updateTemperatureDisplay(temperature);
     
-    // Feed Gate 1
-    const servo1Pos = data.servo1 || 0;
-    servo1Position.textContent = `${servo1Pos}°`;
-    
-    if (servo1Pos === 90) {
-        servo1Indicator.className = 'status-indicator status-online';
-        servo1Indicator.querySelector('.status-text').textContent = 'OPEN';
-        servo1Icon.innerHTML = '<i class="fas fa-door-open"></i>';
-        document.querySelector('.feed-gate-1-card').classList.add('active');
-    } else {
-        servo1Indicator.className = 'status-indicator status-offline';
-        servo1Indicator.querySelector('.status-text').textContent = 'CLOSED';
-        servo1Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
-        document.querySelector('.feed-gate-1-card').classList.remove('active');
-    }
-    
-    // Feed Gate 2
-    const servo2Pos = data.servo2 || 0;
-    servo2Position.textContent = `${servo2Pos}°`;
-    
-    if (servo2Pos === 90) {
-        servo2Indicator.className = 'status-indicator status-online';
-        servo2Indicator.querySelector('.status-text').textContent = 'OPEN';
-        servo2Icon.innerHTML = '<i class="fas fa-door-open"></i>';
-        document.querySelector('.feed-gate-2-card').classList.add('active');
-    } else {
-        servo2Indicator.className = 'status-indicator status-offline';
-        servo2Indicator.querySelector('.status-text').textContent = 'CLOSED';
-        servo2Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
-        document.querySelector('.feed-gate-2-card').classList.remove('active');
-    }
-    
     // Water Pump
     const pumpState = data.pump || false;
     pumpStatusText.textContent = pumpState ? 'RUNNING' : 'STOPPED';
@@ -551,36 +511,7 @@ function updateConnectionDisplay(data) {
 }
 
 // ===== COMMAND CONTROL =====
-function controlServo2(action) {
-    sendCommand('servo2', action);
-}
-
-function sendCommand(device, action) {
-    if (!user) {
-        showNotification('Please login first', 'error');
-        return;
-    }
-    
-    if (!activeBridgeId) {
-        showNotification('Please select a bridge first', 'error');
-        return;
-    }
-    
-    console.log(`Sending command: ${device} -> ${action}`);
-    
-    // Send command to Firebase
-    const commandRef = database.ref(`/commands/${device}`);
-    commandRef.set(action)
-        .then(() => {
-            showNotification(`${device.toUpperCase()} command sent: ${action}`, 'success');
-            logEvent(`Command sent: ${device} ${action}`, 'info');
-        })
-        .catch((error) => {
-            console.error('Command send error:', error);
-            showNotification(`Failed to send command: ${error.message}`, 'error');
-            logEvent(`Command failed: ${device} ${action} - ${error.message}`, 'error');
-        });
-}
+// Removed servo control functions since servos are removed
 
 function startCommandMonitoring() {
     if (!user || !activeBridgeId) return;
@@ -870,16 +801,6 @@ function resetDashboard() {
     }
     tempBadge.textContent = 'NORMAL';
     tempUpdate.textContent = 'Never';
-    
-    servo1Position.textContent = '0°';
-    servo1Indicator.className = 'status-indicator status-offline';
-    servo1Indicator.querySelector('.status-text').textContent = 'CLOSED';
-    servo1Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
-    
-    servo2Position.textContent = '0°';
-    servo2Indicator.className = 'status-indicator status-offline';
-    servo2Indicator.querySelector('.status-text').textContent = 'CLOSED';
-    servo2Icon.innerHTML = '<i class="fas fa-door-closed"></i>';
     
     pumpStatusText.textContent = 'STOPPED';
     pumpIndicator.className = 'status-indicator status-offline';
