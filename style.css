@@ -609,12 +609,12 @@ body {
     justify-content: center;
 }
 
-.servo-visual, .pump-visual, .fan-visual {
+.pump-visual, .fan-visual {
     text-align: center;
     margin-bottom: 25px;
 }
 
-.servo-icon, .pump-icon, .fan-icon {
+.pump-icon, .fan-icon {
     font-size: 64px;
     color: var(--gray-light);
     margin-bottom: 15px;
@@ -642,48 +642,6 @@ body {
     background: #3498db;
 }
 
-/* Feed Gate 1 Card (Green) */
-.feed-gate-1-card {
-    border-top: 4px solid #27ae60;
-}
-
-.feed-gate-1-card .card-header {
-    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
-}
-
-.feed-gate-1-card .card-header h3 i {
-    color: #27ae60;
-}
-
-.feed-gate-1-card.active .servo-icon {
-    color: #27ae60;
-}
-
-.feed-gate-1-card.active .status-dot {
-    background: #27ae60;
-}
-
-/* Feed Gate 2 Card (Green) */
-.feed-gate-2-card {
-    border-top: 4px solid #27ae60;
-}
-
-.feed-gate-2-card .card-header {
-    background: linear-gradient(135deg, #eafaf1, #d5f5e3);
-}
-
-.feed-gate-2-card .card-header h3 i {
-    color: #27ae60;
-}
-
-.feed-gate-2-card.active .servo-icon {
-    color: #27ae60;
-}
-
-.feed-gate-2-card.active .status-dot {
-    background: #27ae60;
-}
-
 /* Fan Card (Purple) */
 .fan-card {
     border-top: 4px solid var(--purple);
@@ -705,7 +663,7 @@ body {
     background: var(--purple);
 }
 
-.servo-position, .pump-status, .fan-speed {
+.pump-status, .fan-speed {
     background: var(--light);
     padding: 10px 15px;
     border-radius: var(--radius-sm);
@@ -714,12 +672,12 @@ body {
     gap: 10px;
 }
 
-.position-label, .status-label, .speed-label {
+.status-label, .speed-label {
     color: var(--gray);
     font-size: 14px;
 }
 
-.position-value, .status-value, .speed-value {
+.status-value, .speed-value {
     font-weight: 700;
     color: var(--dark);
     font-size: 16px;
@@ -751,54 +709,6 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-}
-
-/* Control Buttons */
-.control-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-}
-
-.btn-control {
-    padding: 12px;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-
-.btn-control i {
-    font-size: 18px;
-}
-
-/* Feed Gate 2 specific button colors */
-.feed-gate-2-card .btn-open {
-    background: linear-gradient(135deg, #27ae60, #229954);
-    color: white;
-}
-
-.feed-gate-2-card .btn-open:hover {
-    background: linear-gradient(135deg, #229954, #27ae60);
-}
-
-.feed-gate-2-card .btn-close {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-}
-
-.feed-gate-2-card .btn-close:hover {
-    background: linear-gradient(135deg, #c0392b, #e74c3c);
-}
-
-.feed-gate-2-card .btn-toggle {
-    background: linear-gradient(135deg, #f39c12, #e67e22);
-    color: white;
-}
-
-.feed-gate-2-card .btn-toggle:hover {
-    background: linear-gradient(135deg, #e67e22, #f39c12);
 }
 
 /* Info Card */
@@ -1107,10 +1017,6 @@ body {
     }
     
     .bridge-list {
-        grid-template-columns: 1fr;
-    }
-    
-    .control-buttons {
         grid-template-columns: 1fr;
     }
     
