@@ -156,6 +156,37 @@
                     </div>
                 </div>
 
+                <!-- Temperature Card -->
+                <div class="card sensor-card temperature-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-thermometer-half"></i> Temperature</h3>
+                        <span class="card-badge" id="tempBadge">NORMAL</span>
+                    </div>
+                    <div class="sensor-content">
+                        <div class="temperature-container">
+                            <div class="temperature-display" id="temperatureValue">
+                                <span class="temp-number">0.0</span>
+                                <span class="temp-unit">°C</span>
+                            </div>
+                            <div class="temperature-label">Current Temperature</div>
+                        </div>
+                        <div class="sensor-info">
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-history"></i> Last Update:</span>
+                                <span id="tempUpdate" class="info-value">Never</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-fire"></i> High Alert:</span>
+                                <span class="info-value">Above 30°C</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label"><i class="fas fa-snowflake"></i> Low Alert:</span>
+                                <span class="info-value">Below 15°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Connection Info Card -->
                 <div class="card info-card">
                     <div class="card-header">
@@ -208,7 +239,6 @@
                                 <span class="position-value" id="servo1Position">0°</span>
                             </div>
                         </div>
-                        <!-- No buttons for Feed Gate 1 -->
                     </div>
                 </div>
 
@@ -264,7 +294,28 @@
                                 <span class="status-value" id="pumpStatusText">STOPPED</span>
                             </div>
                         </div>
-                        <!-- No buttons for Water Pump -->
+                    </div>
+                </div>
+
+                <!-- Fan Status Card -->
+                <div class="card control-card fan-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-fan"></i> Cooling Fan</h3>
+                        <div class="status-indicator" id="fanIndicator">
+                            <span class="status-dot"></span>
+                            <span class="status-text">OFF</span>
+                        </div>
+                    </div>
+                    <div class="control-content">
+                        <div class="fan-visual">
+                            <div class="fan-icon" id="fanIcon">
+                                <i class="fas fa-fan"></i>
+                            </div>
+                            <div class="fan-speed">
+                                <span class="speed-label">Status:</span>
+                                <span class="speed-value" id="fanStatusText">STOPPED</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
