@@ -119,6 +119,9 @@ function initApp() {
     lastFeedUpdate = Date.now();
     lastConnectionUpdate = Date.now();
     
+    // Hide logout button initially (login page)
+    logoutBtn.style.display = 'none';
+    
     console.log('Application initialized');
 }
 
@@ -210,12 +213,18 @@ function handleAuthStateChanged(firebaseUser) {
         showDashboard();
         loadBridges();
         logEvent('User logged in', 'info');
+        
+        // Show logout button (on dashboard)
+        logoutBtn.style.display = 'flex';
     } else {
         // User is signed out
         user = null;
         userEmail.textContent = 'Not logged in';
         showLogin();
         resetDashboard();
+        
+        // Hide logout button (on login page)
+        logoutBtn.style.display = 'none';
     }
 }
 
@@ -402,7 +411,7 @@ function updateSensorDisplay(data) {
     feedUpdate.textContent = formatTimeAgo(data.timestamp);
     lastFeedUpdate = data.timestamp || Date.now();
     
-    // Feed Gate 1 (formerly Servo 1)
+    // Feed Gate 1
     const servo1Pos = data.servo1 || 0;
     servo1Position.textContent = `${servo1Pos}°`;
     
@@ -418,7 +427,7 @@ function updateSensorDisplay(data) {
         document.querySelector('.feed-gate-1-card').classList.remove('active');
     }
     
-    // Feed Gate 2 (formerly Servo 2)
+    // Feed Gate 2
     const servo2Pos = data.servo2 || 0;
     servo2Position.textContent = `${servo2Pos}°`;
     
