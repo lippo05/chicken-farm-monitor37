@@ -22,6 +22,8 @@
     --gray-light: #bdc3c7;
     --success: #27ae60;
     --info: #3498db;
+    --purple: #9b59b6;
+    --purple-dark: #8e44ad;
     
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -461,6 +463,11 @@ body {
     color: var(--warning);
 }
 
+.temperature-card .card-badge {
+    background: #d4efdf;
+    color: var(--success);
+}
+
 /* Sensor Cards */
 .sensor-content {
     padding: 25px;
@@ -511,6 +518,60 @@ body {
     margin-top: 8px;
 }
 
+/* Temperature Card */
+.temperature-card {
+    border-top: 4px solid #e17055;
+}
+
+.temperature-card .card-header {
+    background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+}
+
+.temperature-card .card-header h3 i {
+    color: #e17055;
+}
+
+.temperature-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.temperature-display {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #55efc4, #00b894);
+    color: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.temp-number {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    transition: color 0.5s ease;
+}
+
+.temp-unit {
+    font-size: 24px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.temperature-label {
+    text-align: center;
+    color: var(--gray);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
 .sensor-info {
     margin-top: 20px;
 }
@@ -548,12 +609,12 @@ body {
     justify-content: center;
 }
 
-.servo-visual, .pump-visual {
+.servo-visual, .pump-visual, .fan-visual {
     text-align: center;
     margin-bottom: 25px;
 }
 
-.servo-icon, .pump-icon {
+.servo-icon, .pump-icon, .fan-icon {
     font-size: 64px;
     color: var(--gray-light);
     margin-bottom: 15px;
@@ -623,7 +684,28 @@ body {
     background: #27ae60;
 }
 
-.servo-position, .pump-status {
+/* Fan Card (Purple) */
+.fan-card {
+    border-top: 4px solid var(--purple);
+}
+
+.fan-card .card-header {
+    background: linear-gradient(135deg, #f3e6f8, #e8daef);
+}
+
+.fan-card .card-header h3 i {
+    color: var(--purple);
+}
+
+.fan-card.active .fan-icon {
+    color: var(--purple);
+}
+
+.fan-card.active .status-dot {
+    background: var(--purple);
+}
+
+.servo-position, .pump-status, .fan-speed {
     background: var(--light);
     padding: 10px 15px;
     border-radius: var(--radius-sm);
@@ -632,12 +714,12 @@ body {
     gap: 10px;
 }
 
-.position-label, .status-label {
+.position-label, .status-label, .speed-label {
     color: var(--gray);
     font-size: 14px;
 }
 
-.position-value, .status-value {
+.position-value, .status-value, .speed-value {
     font-weight: 700;
     color: var(--dark);
     font-size: 16px;
@@ -967,6 +1049,35 @@ body {
     background: linear-gradient(135deg, var(--warning-dark), var(--warning));
 }
 
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spin {
+    animation: spin 2s linear infinite;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1200px) {
     .dashboard-grid {
@@ -1031,6 +1142,19 @@ body {
         padding: 10px 16px;
         font-size: 13px;
     }
+    
+    .temperature-display {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .temp-number {
+        font-size: 36px;
+    }
+    
+    .temp-unit {
+        font-size: 18px;
+    }
 }
 
 /* ===== SCROLLBAR STYLING ===== */
@@ -1051,26 +1175,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--gray);
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-.pulse {
-    animation: pulse 2s infinite;
-}
-
-.blink {
-    animation: blink 1s infinite;
 }
 
 /* ===== UTILITY CLASSES ===== */
