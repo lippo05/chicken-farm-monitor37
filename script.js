@@ -5,13 +5,13 @@
 
 // ===== FIREBASE CONFIGURATION =====
 const firebaseConfig = {
-  apiKey: "AIzaSyC8OZZ27bP-HQXimnYbyNzCrWDJdgupl1I",
-  authDomain: "farmmonitoring-a9cfa.firebaseapp.com",
-  databaseURL: "https://farmmonitoring-a9cfa-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "farmmonitoring-a9cfa",
-  storageBucket: "farmmonitoring-a9cfa.firebasestorage.app",
-  messagingSenderId: "1093700096226",
-  appId: "1:1093700096226:web:dc2174ea0cda0052b98ebb"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 
 // ===== GLOBAL VARIABLES =====
